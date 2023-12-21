@@ -62,6 +62,14 @@ public class NotProd {
         cartService.addItem(memberUser1, product2);
         cartService.addItem(memberUser1, product3);
 
+        cartService.addItem(memberUser2, product1);
+        cartService.addItem(memberUser2, product2);
+        cartService.addItem(memberUser2, product3);
+
+        cartService.addItem(memberUser3, product1);
+        cartService.addItem(memberUser3, product2);
+        cartService.addItem(memberUser3, product3);
+
         memberService.addCash(memberUser1, 150_000, CashLog.EvenType.충전__무통장입금, memberUser1);
         memberService.addCash(memberUser1, -20_000, CashLog.EvenType.출금__통장입금, memberUser1);
 
@@ -70,5 +78,11 @@ public class NotProd {
         long order1PayPrice = order1.calcPayPrice();
 
         orderService.payByCashOnly(order1);
+
+        memberService.addCash(memberUser3, 150_000, CashLog.EvenType.충전__무통장입금, memberUser3);
+
+        Order order2 = orderService.createFromCart(memberUser3);
+        orderService.payByCashOnly(order2);
+        orderService.refund(order2);
     }
 }
