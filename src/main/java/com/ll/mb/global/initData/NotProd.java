@@ -34,6 +34,7 @@ public class NotProd {
     ApplicationRunner initNotProd() {
         return args -> {
             self.work1();
+            self.work2();
         };
     }
 
@@ -84,5 +85,13 @@ public class NotProd {
         Order order2 = orderService.createFromCart(memberUser3);
         orderService.payByCashOnly(order2);
         orderService.refund(order2);
+    }
+
+    @Transactional
+    public void work2() {
+//        Member memberUser1 = memberService.findByUsername("user1").get();
+//        Product product1 = productService.findById(1L).get();
+//
+//        cartService.addItem(memberUser1, product1);
     }
 }

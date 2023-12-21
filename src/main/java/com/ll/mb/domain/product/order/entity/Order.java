@@ -1,5 +1,6 @@
 package com.ll.mb.domain.product.order.entity;
 
+import com.ll.mb.domain.global.exceptions.GlobalException;
 import com.ll.mb.domain.member.member.entity.Member;
 import com.ll.mb.domain.product.cart.entity.CartItem;
 import com.ll.mb.global.jpa.BaseEntity;
@@ -37,10 +38,14 @@ public class Order extends BaseEntity {
     private LocalDateTime refundDate; // 환불일
 
     public void addItem(CartItem cartItem) {
+        if (buyer.has(cartItem.getProduct()))
+            throw new GlobalException("400-1", "이미 구매한 상품입니다.");
+
         OrderItem orderItem = OrderItem.builder()
                 .order(this)
                 .product(cartItem.getProduct())
                 .build();
+
 
         orderItems.add(orderItem);
     }
