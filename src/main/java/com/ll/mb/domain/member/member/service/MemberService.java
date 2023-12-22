@@ -1,5 +1,6 @@
 package com.ll.mb.domain.member.member.service;
 
+import com.ll.mb.domain.base.genFile.service.GenFileService;
 import com.ll.mb.domain.cash.cash.entity.CashLog;
 import com.ll.mb.domain.cash.cash.repository.CashLogRepository;
 import com.ll.mb.domain.cash.cash.service.CashService;
@@ -24,9 +25,15 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final CashLogRepository cashLogRepository;
     private final CashService cashService;
+    private final GenFileService genFileService;
 
     @Transactional
     public RsData<Member> join(String username, String password, String nickname) {
+        return join(username, password, nickname, null);
+    }
+
+    @Transactional
+    public RsData<Member> join(String username, String password, String nickname, String profileImgFilePath) {
         if (findByUsername(username).isPresent()) {
             return RsData.of("400-2", "이미 존재하는 회원입니다.");
         }
@@ -38,7 +45,15 @@ public class MemberService {
                 .build();
         memberRepository.save(member);
 
+        if (Ut.str.hasLength(profileImgFilePath)) {
+            saveProfileImg(member, profileImgFilePath);
+        }
+
         return RsData.of("200", "%s님 환영합니다. 회원가입이 완료되었습니다. 로그인 후 이용해주세요.".formatted(member.getUsername()), member);
+    }
+
+    private void saveProfileImg(Member member, String profileImgFilePath) {
+        genFileService.save(member.getModelName(), member.getId(), "common", "profileImg", 1, profileImgFilePath);
     }
 
     public Optional<Member> findByUsername(String username) {
@@ -61,6 +76,6 @@ public class MemberService {
 
         String filePath = Ut.str.hasLength(profileImgUrl) ? Ut.file.downloadFileByHttp(profileImgUrl, AppConfig.getTempDirPath()) : "";
 
-        return join(username, "", nickname);
+        return join(username, "", nickname, filePath);
     }
 }
