@@ -1,8 +1,8 @@
 package com.ll.mb.domain.member.member.service;
 
+import com.ll.mb.domain.base.genFile.entity.GenFile;
 import com.ll.mb.domain.base.genFile.service.GenFileService;
 import com.ll.mb.domain.cash.cash.entity.CashLog;
-import com.ll.mb.domain.cash.cash.repository.CashLogRepository;
 import com.ll.mb.domain.cash.cash.service.CashService;
 import com.ll.mb.domain.member.member.entity.Member;
 import com.ll.mb.domain.member.member.repository.MemberRepository;
@@ -23,7 +23,6 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final CashLogRepository cashLogRepository;
     private final CashService cashService;
     private final GenFileService genFileService;
 
@@ -77,5 +76,18 @@ public class MemberService {
         String filePath = Ut.str.hasLength(profileImgUrl) ? Ut.file.downloadFileByHttp(profileImgUrl, AppConfig.getTempDirPath()) : "";
 
         return join(username, "", nickname, filePath);
+    }
+
+    public String getProfileImgUrl(Member member) {
+        return Optional.ofNullable(member)
+                .flatMap(this::findProfileImgUrl)
+                .orElse("https://placehold.co/30x30?text=UU");
+    }
+
+    private Optional<String> findProfileImgUrl(Member member) {
+        return genFileService.findBy(
+                        member.getModelName(), member.getId(), "common", "profileImg", 1
+                )
+                .map(GenFile::getUrl);
     }
 }
