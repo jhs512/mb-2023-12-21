@@ -24,7 +24,7 @@ public class MemberService {
     private final CashService cashService;
 
     @Transactional
-    public RsData<Member> join(String username, String password) {
+    public RsData<Member> join(String username, String password, String nickname) {
         if (findByUsername(username).isPresent()) {
             return RsData.of("400-2", "이미 존재하는 회원입니다.");
         }
@@ -32,6 +32,7 @@ public class MemberService {
         Member member = Member.builder()
                 .username(username)
                 .password(passwordEncoder.encode(password))
+                .nickname(nickname)
                 .build();
         memberRepository.save(member);
 
@@ -48,5 +49,14 @@ public class MemberService {
 
         long newRestCash = member.getRestCash() + cashLog.getPrice();
         member.setRestCash(newRestCash);
+    }
+
+    @Transactional
+    public RsData<Member> whenSocialLogin(String providerTypeCode, String username, String nickname, String profileImgUrl) {
+        Optional<Member> opMember = findByUsername(username);
+
+        if (opMember.isPresent()) return RsData.of("200", "이미 존재합니다.", opMember.get());
+
+        return join(username, "", nickname);
     }
 }
