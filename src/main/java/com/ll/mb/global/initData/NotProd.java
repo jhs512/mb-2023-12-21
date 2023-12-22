@@ -31,6 +31,7 @@ public class NotProd {
     private final OrderService orderService;
 
     @Bean
+    @org.springframework.core.annotation.Order(3)
     ApplicationRunner initNotProd() {
         return args -> {
             self.work1();

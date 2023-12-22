@@ -45,6 +45,10 @@ logging:
     org.hibernate.orm.jdbc.extract: TRACE
     org.springframework.transaction.interceptor: TRACE
 custom:
+  temp:
+    dirPath: c:/temp/mb/temp
+  genFile:
+    dirPath: c:/temp/mb
   site:
     name: mb.oa.gg
     baseUrl: "http://localhost:${server.port}"
