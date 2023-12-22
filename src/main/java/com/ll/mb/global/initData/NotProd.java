@@ -90,6 +90,7 @@ public class NotProd {
 
         Order order3 = orderService.createFromCart(memberUser2);
         orderService.checkCanPay(order3, 55_000);
+        orderService.payByTossPayments(order3, 55_000);
     }
 
     @Transactional
