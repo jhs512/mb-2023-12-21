@@ -11,6 +11,7 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,6 +76,24 @@ public class Order extends BaseEntity {
 
         orderItems.stream()
                 .forEach(OrderItem::setRefundDone);
+    }
+
+    public String getName() {
+        String name = orderItems.get(0).getProduct().getName();
+
+        if (orderItems.size() > 1) {
+            name += " 외 %d건".formatted(orderItems.size() - 1);
+        }
+
+        return name;
+    }
+
+    public String getCode() {
+        // yyyy-MM-dd 형식의 DateTimeFormatter 생성
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // LocalDateTime 객체를 문자열로 변환
+        return getCreateDate().format(formatter) + "__" + getId();
     }
 }
 
