@@ -116,7 +116,7 @@
 
             form.useCash.value = form.useCash.value.trim();
 
-            const useCash = form.useCash.valueAsNumber;
+            const useCash = form.useCash.valueAsNumber || 0;
 
             paymentMethodWidget.updateAmount(amount - useCash);
 
