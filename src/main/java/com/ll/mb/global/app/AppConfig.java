@@ -10,6 +10,21 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @RequiredArgsConstructor
 public class AppConfig {
+    private static String activeProfile;
+
+    @Value("${spring.profiles.active}")
+    public void setActiveProfile(String value) {
+        activeProfile = value;
+    }
+
+    public static boolean isNotProd() {
+        return isProd() == false;
+    }
+
+    public static boolean isProd() {
+        return activeProfile.equals("prod");
+    }
+
     @Getter
     private static String siteName;
 

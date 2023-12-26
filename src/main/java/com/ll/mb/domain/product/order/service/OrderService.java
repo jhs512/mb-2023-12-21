@@ -121,7 +121,7 @@ public class OrderService {
         return order.getBuyer().equals(actor);
     }
 
-    private Optional<Order> findByCode(String code) {
+    public Optional<Order> findByCode(String code) {
         long id = Long.parseLong(code.split("__", 2)[1]);
 
         return findById(id);
