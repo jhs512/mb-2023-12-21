@@ -24,6 +24,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.List;
 
 @Controller
 @RequestMapping("/order")
@@ -31,6 +32,16 @@ import java.util.Base64;
 public class OrderController {
     private final Rq rq;
     private final OrderService orderService;
+
+    @GetMapping("/myList")
+    @PreAuthorize("isAuthenticated()")
+    public String showMyList() {
+        List<Order> orders = orderService.findByBuyer(rq.getMember());
+
+        rq.setAttribute("orders", orders);
+
+        return "domain/product/order/myList";
+    }
 
     @GetMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
@@ -74,6 +85,23 @@ public class OrderController {
     @ResponseBody
     public String showConfirm() {
         return "안녕";
+    }
+
+    @PostMapping("/{id}/payByCash")
+    public String payByCash(@PathVariable long id) {
+        Order order = orderService.findById(id).orElse(null);
+
+        if (order == null) {
+            throw new GlobalException("404", "존재하지 않는 주문입니다.");
+        }
+
+        if (!orderService.canPay(order, 0)) {
+            throw new GlobalException("403", "권한이 없습니다.");
+        }
+
+        orderService.payByCashOnly(order);
+
+        return rq.redirect("/order/" + order.getId(), "결제가 완료되었습니다.");
     }
 
     @PostMapping("/confirm")
