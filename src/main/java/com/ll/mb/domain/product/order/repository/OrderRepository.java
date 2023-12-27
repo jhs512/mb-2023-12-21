@@ -8,4 +8,10 @@ import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByBuyerOrderByIdDesc(Member buyer);
+
+    List<Order> findByBuyerAndPayDateIsNotNullOrderByIdDesc(Member buyer);
+
+    List<Order> findByBuyerAndCancelDateIsNotNullOrderByIdDesc(Member buyer);
+
+    List<Order> findByBuyerAndRefundDateIsNotNullOrderByIdDesc(Member buyer);
 }
