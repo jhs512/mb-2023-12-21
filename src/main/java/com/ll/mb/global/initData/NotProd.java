@@ -120,6 +120,11 @@ public class NotProd {
         cartService.addItem(memberUser5, product3);
 
         Order order7 = orderService.createFromCart(memberUser5);
+        orderService.payByCashOnly(order7);
+        orderService.cancel(order7);
+
+        cartService.addItem(memberUser5, product4);
+        Order order8 = orderService.createFromCart(memberUser5);
     }
 
     @Transactional
