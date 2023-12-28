@@ -69,4 +69,16 @@ public class ProductController {
 
         return rq.redirect(redirectUrl, null);
     }
+
+    @DeleteMapping("/{id}/cancelBookmark")
+    @PreAuthorize("isAuthenticated()")
+    public String cancelBookmark(
+            @PathVariable long id,
+            @RequestParam(defaultValue = "/") String redirectUrl
+    ) {
+        Product product = productService.findById(id).orElseThrow(() -> new GlobalException("400", "존재하지 않는 상품입니다."));
+        productService.cancelBookmark(rq.getMember(), product);
+
+        return rq.redirect(redirectUrl, null);
+    }
 }

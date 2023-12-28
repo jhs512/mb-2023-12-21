@@ -15,13 +15,18 @@ public class ProductBookmarkService {
     private final ProductBookmarkRepository productBookmarkRepository;
 
     @Transactional
-    public void createProductBookmark(Member member, Product product) {
+    public void bookmark(Member member, Product product) {
         ProductBookmark productBookmark = ProductBookmark.builder()
                 .member(member)
                 .product(product)
                 .build();
 
         productBookmarkRepository.save(productBookmark);
+    }
+
+    @Transactional
+    public void cancelBookmark(Member member, Product product) {
+        productBookmarkRepository.deleteByMemberAndProduct(member, product);
     }
 
     public boolean canBookmark(Member actor, Product product) {

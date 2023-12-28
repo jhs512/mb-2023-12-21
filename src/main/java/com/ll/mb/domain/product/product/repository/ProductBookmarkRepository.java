@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProductBookmarkRepository extends JpaRepository<ProductBookmark, Long> {
     boolean existsByMemberAndProduct(Member actor, Product product);
+
+    void deleteByMemberAndProduct(Member member, Product product);
 }
