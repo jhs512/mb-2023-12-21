@@ -2,6 +2,8 @@ package com.ll.mb.domain.product.product.controller;
 
 import com.ll.mb.domain.global.exceptions.GlobalException;
 import com.ll.mb.domain.product.product.entity.Product;
+import com.ll.mb.domain.product.product.entity.ProductBookmark;
+import com.ll.mb.domain.product.product.service.ProductBookmarkService;
 import com.ll.mb.domain.product.product.service.ProductService;
 import com.ll.mb.global.rq.Rq;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +27,19 @@ import java.util.stream.Collectors;
 public class ProductController {
     private final Rq rq;
     private final ProductService productService;
+    private final ProductBookmarkService productBookmarkService;
+
+    @GetMapping("/bookmarkList")
+    public String showBookmarkList() {
+        List<ProductBookmark> productBookmarks = productBookmarkService.findByMember(rq.getMember());
+
+        rq.setAttribute("productBookmarks", productBookmarks);
+
+        return "domain/product/product/bookmarkList";
+    }
 
     @GetMapping("/list")
-    public String list(
+    public String showList(
             @RequestParam(value = "kwType", defaultValue = "name") List<String> kwTypes,
             @RequestParam(defaultValue = "") String kw,
             @RequestParam(defaultValue = "1") int page,

@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -39,5 +41,9 @@ public class ProductBookmarkService {
         if (actor == null) return false;
 
         return productBookmarkRepository.existsByMemberAndProduct(actor, product);
+    }
+
+    public List<ProductBookmark> findByMember(Member member) {
+        return productBookmarkRepository.findByMemberOrderByIdDesc(member);
     }
 }
