@@ -4,6 +4,8 @@ import com.ll.mb.domain.global.exceptions.GlobalException;
 import com.ll.mb.domain.member.member.entity.Member;
 import com.ll.mb.domain.product.order.entity.Order;
 import com.ll.mb.domain.product.order.service.OrderService;
+import com.ll.mb.domain.product.product.entity.Product;
+import com.ll.mb.domain.product.product.service.ProductService;
 import com.ll.mb.global.app.AppConfig;
 import com.ll.mb.global.rq.Rq;
 import com.ll.mb.standard.util.Ut;
@@ -39,6 +41,19 @@ import java.util.List;
 public class OrderController {
     private final Rq rq;
     private final OrderService orderService;
+    private final ProductService productService;
+
+    @PostMapping("/directMakeOrder/{productId}")
+    public String directMakeOrder(
+            @PathVariable long productId
+    ) {
+        Product product = productService.findById(productId)
+                .orElseThrow(() -> new GlobalException("400", "존재하지 않는 상품입니다."));
+
+        Order order = orderService.createFromProduct(rq.getMember(), product);
+
+        return rq.redirect("/order/" + order.getId(), "주문이 완료되었습니다.");
+    }
 
     @PostMapping("/createFromCart")
     public String createFromCart() {

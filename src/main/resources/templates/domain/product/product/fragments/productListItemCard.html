@@ -36,7 +36,14 @@
             >
                 <i class="fa-solid fa-heart text-[#ff0000] group-hover:text-[#afafaf]"></i>
             </a>
-            <a class="btn btn-sm btn-outline" href="">바로결제</a>
+
+            <a th:if="${@cartService.canDirectMakeOrder(@rq.member, product)}"
+               class="btn btn-sm btn-outline"
+               method="POST"
+               th:href="|/order/directMakeOrder/${product.id}|"
+            >
+                바로결제
+            </a>
 
             <a
                     method="POST"
