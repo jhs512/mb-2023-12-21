@@ -82,7 +82,7 @@ public class ProductController {
                         kwType -> true
                 ));
 
-        Page<Product> itemsPage = productService.search(rq.getMember(), true, kwTypes, kw, pageable);
+        Page<Product> itemsPage = productService.search(rq.getMember(), null, kwTypes, kw, pageable);
         model.addAttribute("itemPage", itemsPage);
         model.addAttribute("kwTypesMap", kwTypesMap);
         model.addAttribute("page", page);

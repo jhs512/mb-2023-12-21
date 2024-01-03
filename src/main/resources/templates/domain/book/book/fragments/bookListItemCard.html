@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+</head>
+
+<body>
+
+<th:block th:fragment="bookListItemCard(book)">
+    <div class="card-body">
+        <h2 class="card-title">
+            <span th:text="${book.id}"></span>
+            <span>:</span>
+            <span th:text="${book.title}"></span>
+        </h2>
+
+        <div>
+            <span th:text="${#numbers.formatDecimal(book.price, 0, 'COMMA', 0, 'POINT')}"></span><span>원</span>
+        </div>
+
+        <div class="card-actions justify-end">
+
+        </div>
+    </div>
+</th:block>
+
+</body>
+</html>
