@@ -33,14 +33,21 @@ import java.util.Base64;
 import java.util.List;
 
 @Controller
+@PreAuthorize("isAuthenticated()")
 @RequestMapping("/order")
 @RequiredArgsConstructor
 public class OrderController {
     private final Rq rq;
     private final OrderService orderService;
 
+    @PostMapping("/createFromCart")
+    public String createFromCart() {
+        Order order = orderService.createFromCart(rq.getMember());
+
+        return rq.redirect("/order/" + order.getId(), "주문이 완료되었습니다.");
+    }
+
     @DeleteMapping("/{id}/cancel")
-    @PreAuthorize("isAuthenticated()")
     public String cancel(
             @PathVariable long id,
             String redirectUrl
@@ -57,7 +64,7 @@ public class OrderController {
 
         orderService.cancel(order);
 
-        if ( Ut.str.isBlank(redirectUrl) ) {
+        if (Ut.str.isBlank(redirectUrl)) {
             redirectUrl = "/order/" + order.getId();
         }
 
@@ -65,7 +72,6 @@ public class OrderController {
     }
 
     @GetMapping("/myList")
-    @PreAuthorize("isAuthenticated()")
     public String showMyList(
             @RequestParam(defaultValue = "1") int page,
             Boolean payStatus,
@@ -78,13 +84,12 @@ public class OrderController {
 
         Page<Order> orderPage = orderService.search(rq.getMember(), payStatus, cancelStatus, refundStatus, pageable);
 
-        rq.setAttribute("orderPage", orderPage);
+        rq.attr("orderPage", orderPage);
 
         return "domain/product/order/myList";
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("isAuthenticated()")
     public String showDetail(@PathVariable long id, Model model) {
         Order order = orderService.findById(id).orElse(null);
 
@@ -107,24 +112,16 @@ public class OrderController {
     }
 
     @GetMapping("/success")
-    @PreAuthorize("isAuthenticated()")
     public String showSuccess() {
         return "domain/product/order/success";
     }
 
     @GetMapping("/fail")
-    @PreAuthorize("isAuthenticated()")
     public String showFail(String failCode, String failMessage) {
-        rq.setAttribute("code", failCode);
-        rq.setAttribute("message", failMessage);
+        rq.attr("code", failCode);
+        rq.attr("message", failMessage);
 
         return "domain/product/order/fail";
-    }
-
-    @GetMapping("/confirm")
-    @ResponseBody
-    public String showConfirm() {
-        return "안녕";
     }
 
     @PostMapping("/{id}/payByCash")

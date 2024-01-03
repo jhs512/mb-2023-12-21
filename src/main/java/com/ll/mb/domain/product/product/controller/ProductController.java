@@ -33,7 +33,7 @@ public class ProductController {
     public String showBookmarkList() {
         List<ProductBookmark> productBookmarks = productBookmarkService.findByMember(rq.getMember());
 
-        rq.setAttribute("productBookmarks", productBookmarks);
+        rq.attr("productBookmarks", productBookmarks);
 
         return "domain/product/product/bookmarkList";
     }
