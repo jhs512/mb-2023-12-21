@@ -7,6 +7,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -28,5 +29,18 @@ public class WithdrawApply extends BaseTime {
 
     public boolean isWithdrawDone() {
         return withdrawDate != null;
+    }
+
+    public void setWithdrawDone() {
+        withdrawDate = LocalDateTime.now();
+    }
+
+    public String getForPrintWithdrawStatus() {
+        if (withdrawDate != null)
+            return "처리완료(" + withdrawDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + ")";
+
+        if (withdrawDate == null) return "-";
+
+        return "처리가능";
     }
 }
