@@ -54,4 +54,8 @@ public class WithdrawService {
     public void delete(WithdrawApply withdrawApply) {
         withdrawApplyRepository.delete(withdrawApply);
     }
+
+    public List<WithdrawApply> findAll() {
+        return withdrawApplyRepository.findAllByOrderByIdDesc();
+    }
 }

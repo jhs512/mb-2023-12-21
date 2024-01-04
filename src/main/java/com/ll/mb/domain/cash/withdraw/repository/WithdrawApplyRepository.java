@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface WithdrawApplyRepository extends JpaRepository<WithdrawApply, Long> {
     List<WithdrawApply> findByApplicantOrderByIdDesc(Member applicant);
+
+    List<WithdrawApply> findAllByOrderByIdDesc();
 }
