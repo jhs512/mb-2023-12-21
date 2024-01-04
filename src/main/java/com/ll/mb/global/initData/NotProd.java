@@ -3,6 +3,7 @@ package com.ll.mb.global.initData;
 import com.ll.mb.domain.book.book.entity.Book;
 import com.ll.mb.domain.book.book.service.BookService;
 import com.ll.mb.domain.cash.cash.entity.CashLog;
+import com.ll.mb.domain.cash.withdraw.service.WithdrawService;
 import com.ll.mb.domain.member.member.entity.Member;
 import com.ll.mb.domain.member.member.service.MemberService;
 import com.ll.mb.domain.product.cart.service.CartService;
@@ -29,6 +30,7 @@ public class NotProd {
     private final ProductService productService;
     private final CartService cartService;
     private final OrderService orderService;
+    private final WithdrawService withdrawService;
 
     @Bean
     @org.springframework.core.annotation.Order(3)
@@ -104,6 +106,8 @@ public class NotProd {
         Order order4 = orderService.createFromCart(memberUser4);
 
         memberService.addCash(memberUser5, 150_000, CashLog.EvenType.충전__무통장입금, memberUser5);
+
+        withdrawService.apply(memberUser5, 150_000, "국민은행", "1234");
 
         cartService.addItem(memberUser5, product1);
 

@@ -26,6 +26,11 @@ public class WithdrawApply extends BaseTime {
     private String bankName;
     private String bankAccountNo;
     private long cash;
+    private String msg;
+
+    public boolean isCancelDone() {
+        return cancelDate != null;
+    }
 
     public boolean isWithdrawDone() {
         return withdrawDate != null;
@@ -42,5 +47,17 @@ public class WithdrawApply extends BaseTime {
         if (withdrawDate == null) return "-";
 
         return "처리가능";
+    }
+
+    public String getForPrintCancelStatus() {
+        if (cancelDate != null)
+            return "취소완료(" + cancelDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + ")";
+
+        return "-";
+    }
+
+    public void setCancelDone(String msg) {
+        cancelDate = LocalDateTime.now();
+        this.msg = msg;
     }
 }
