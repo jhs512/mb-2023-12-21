@@ -53,4 +53,10 @@ public class MemberController {
     public String showLogin() {
         return "domain/member/member/login";
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/me")
+    public String showMe() {
+        return "domain/member/member/me";
+    }
 }
