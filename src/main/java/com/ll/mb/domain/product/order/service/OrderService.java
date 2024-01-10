@@ -117,6 +117,16 @@ public class OrderService {
         memberService.addCash(order.getBuyer(), payPrice, CashLog.EvenType.환불__예치금_주문결제, order);
 
         order.setRefundDone();
+
+        order.getOrderItems()
+                .stream()
+                .forEach(orderItem -> {
+                    Product product = orderItem.getProduct();
+
+                    if (product.isBook()) {
+                        purchasedBookService.delete(order.getBuyer(), product.getBook());
+                    }
+                });
     }
 
     public void checkCanPay(String orderCode, long pgPayPrice) {
