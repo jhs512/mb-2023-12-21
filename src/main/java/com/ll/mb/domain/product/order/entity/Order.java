@@ -53,6 +53,7 @@ public class Order extends BaseTime {
         OrderItem orderItem = OrderItem.builder()
                 .order(this)
                 .product(product)
+                .payPrice(product.getPrice())
                 .rebateRate(AppConfig.getRebateRate())
                 .build();
 
