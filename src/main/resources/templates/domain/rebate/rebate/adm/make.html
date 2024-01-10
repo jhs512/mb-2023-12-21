@@ -1,0 +1,21 @@
+<html layout:decorate="~{global/admLayout}">
+
+<head>
+    <title>정산</title>
+</head>
+
+<body>
+
+<div layout:fragment="content">
+    <h1>정산 데이터 생성</h1>
+
+    <form th:action method="POST">
+        <select name="yearMonth" class="select select-bordered">
+            <option value="2024-01">2024-01</option>
+        </select>
+        <input class="btn btn-primary" type="submit" value="생성">
+    </form>
+</div>
+
+</body>
+</html>

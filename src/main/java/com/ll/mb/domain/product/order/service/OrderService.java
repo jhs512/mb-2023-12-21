@@ -8,6 +8,8 @@ import com.ll.mb.domain.member.member.service.MemberService;
 import com.ll.mb.domain.product.cart.entity.CartItem;
 import com.ll.mb.domain.product.cart.service.CartService;
 import com.ll.mb.domain.product.order.entity.Order;
+import com.ll.mb.domain.product.order.entity.OrderItem;
+import com.ll.mb.domain.product.order.repository.OrderItemRepository;
 import com.ll.mb.domain.product.order.repository.OrderRepository;
 import com.ll.mb.domain.product.product.entity.Product;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
     private final CartService cartService;
     private final MemberService memberService;
     private final PurchasedBookService purchasedBookService;
@@ -182,5 +185,9 @@ public class OrderService {
 
     public boolean canCancel(Member actor, Order order) {
         return actor.equals(order.getBuyer()) && order.isCancelable();
+    }
+
+    public List<OrderItem> findItems() {
+        return orderItemRepository.findAll();
     }
 }
