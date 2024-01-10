@@ -23,7 +23,7 @@ public class Product extends BaseTime {
     private String relTypeCode;
     private long relId;
     private String name;
-    private int price;
+    private long price;
     private boolean published;
 
     public boolean isBook() {

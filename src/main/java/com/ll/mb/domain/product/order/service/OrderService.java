@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -187,7 +188,7 @@ public class OrderService {
         return actor.equals(order.getBuyer()) && order.isCancelable();
     }
 
-    public List<OrderItem> findItems() {
-        return orderItemRepository.findAll();
+    public List<OrderItem> findByPayDateBetween(LocalDateTime startDate, LocalDateTime endDate) {
+        return orderItemRepository.findByOrderPayDateBetweenOrderByIdDesc(startDate, endDate);
     }
 }

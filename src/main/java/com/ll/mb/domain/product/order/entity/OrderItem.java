@@ -21,11 +21,7 @@ public class OrderItem extends BaseTime {
     @ManyToOne
     private Product product;
     private double rebateRate;
-    private int payPrice;
-
-    public long getPayPrice() {
-        return product.getPrice();
-    }
+    private long payPrice;
 
     public void setPaymentDone() {
         switch (product.getRelTypeCode()) {
