@@ -188,7 +188,7 @@ public class OrderService {
         return actor.equals(order.getBuyer()) && order.isCancelable();
     }
 
-    public List<OrderItem> findByPayDateBetween(LocalDateTime startDate, LocalDateTime endDate) {
-        return orderItemRepository.findByOrderPayDateBetweenOrderByIdDesc(startDate, endDate);
+    public List<OrderItem> findNotRefundedByPayDateBetween(LocalDateTime startDate, LocalDateTime endDate) {
+        return orderItemRepository.findByOrderPayDateBetweenAndOrderRefundDateOrderByIdDesc(startDate, endDate, null);
     }
 }
