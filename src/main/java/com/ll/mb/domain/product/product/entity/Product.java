@@ -26,6 +26,10 @@ public class Product extends BaseTime {
     private int price;
     private boolean published;
 
+    public boolean isBook() {
+        return relTypeCode.equals("book");
+    }
+
     public Book getBook() {
         return AppConfig.getEntityManager().getReference(Book.class, relId);
     }
