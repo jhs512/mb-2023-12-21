@@ -17,9 +17,27 @@
         <option value="2024-02">2024-02</option>
     </select>
 
+    <div class="my-3 pl-8">
+        <label class="flex items-center gap-3">
+            <input type="checkbox" class="rebateItemCheckboxAll checkbox">
+            <span>전체선택</span>
+        </label>
+
+        <div class="mt-2">
+            <button class="btn btn-primary">선택정산</button>
+        </div>
+    </div>
+
     <ul class="grid grid-cols-1 md:gird-cols-2 xl:grid-cols-3 gap-5">
         <li th:each="item : ${items}" class="card">
             <div class="card-body bg-base-100 shadow">
+                <input
+                        onchange="RebateItemCheckbox__changed();"
+                        th:if="${@rebateService.canRebate(@rq.member, item)}"
+                        type="checkbox"
+                        class="checkbox rebateItemCheckbox"
+                        th:value="${item.id}"
+                >
                 <div class="card-title">
                     번호 : <span th:text="${item.id}"></span>
                 </div>
@@ -49,12 +67,51 @@
                 </div>
 
                 <div class="card-actions justify-end">
-                    <a th:if="${@rebateService.canRebate(@rq.member, item)}" method="POST" th:href="|/adm/rebate/${item.id}/rebate?redirectUrl=${@rq.encodedCurrentUrl}|"
+                    <a th:if="${@rebateService.canRebate(@rq.member, item)}" method="POST"
+                       th:href="|/adm/rebate/${item.id}/rebate?redirectUrl=${@rq.encodedCurrentUrl}|"
                        class="btn btn-primary">정산</a>
                 </div>
             </div>
         </li>
     </ul>
+
+    <script th:inline="javascript">
+        // 전체선택 체크박스
+        const $rebateItemCheckboxAll = $('.rebateItemCheckboxAll');
+        // 아이템 체크박스
+        const $rebateItemCheckbox = $('.rebateItemCheckbox');
+
+        $rebateItemCheckboxAll.change(function () {
+            const allChecked = $(this).prop('checked');
+            $rebateItemCheckbox.prop('checked', allChecked); // 아이템 체크박스들에게 체크상태 동기화
+        });
+
+        function RebateItemCheckbox__changed() {
+            const allChecked = $rebateItemCheckbox.length == $('.rebateItemCheckbox:checked').length;
+
+            $rebateItemCheckboxAll.prop('checked', allChecked);
+        }
+
+        let RebateForm__submitDone = false;
+
+        function RebateForm__submit() {
+            if (RebateForm__submitDone) return;
+
+            const form = document.rebateForm;
+
+            const $checked = $('.rebateItemCheckbox:checked');
+
+            if ($checked.length == 0) {
+                alert('정산할 주문품목을 선택해주세요.');
+                return;
+            }
+
+            const ids = $checked.map((index, el) => $(el).val()).get();
+            form.ids.value = ids;
+            form.submit();
+            RebateForm__submitDone = true;
+        }
+    </script>
 </div>
 
 </body>
