@@ -19,6 +19,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @ToString(callSuper = true)
 public class RebateItem extends BaseTime {
+    private LocalDateTime payDate; // 결제날짜
     private LocalDateTime eventDate; // 판매(구매)가 발생한 날짜
     private LocalDateTime rebateDate; // 정산일
     @ManyToOne

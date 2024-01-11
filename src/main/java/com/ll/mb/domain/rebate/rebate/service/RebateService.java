@@ -4,6 +4,7 @@ import com.ll.mb.domain.product.order.entity.OrderItem;
 import com.ll.mb.domain.product.order.service.OrderService;
 import com.ll.mb.domain.rebate.rebate.entity.RebateItem;
 import com.ll.mb.domain.rebate.rebate.repository.RebateItemRepository;
+import com.ll.mb.standard.util.Ut;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +38,7 @@ public class RebateService {
                 .stream()
                 .forEach(orderItem -> {
                     RebateItem rebateItem = RebateItem.builder()
+                            .payDate(orderItem.getOrder().getPayDate())
                             .eventDate(orderItem.getOrder().getPayDate())
                             .rebateRate(orderItem.getRebateRate())
                             .payPrice(orderItem.getPayPrice())
@@ -49,5 +51,16 @@ public class RebateService {
 
                     rebateItemRepository.save(rebateItem);
                 });
+    }
+
+    public List<RebateItem> findByPayDateIn(String yearMonth) {
+        int monthEndDay = Ut.date.getEndDayOf(yearMonth);
+
+        String fromDateStr = yearMonth + "-01 00:00:00.000000";
+        String toDateStr = yearMonth + "-%02d 23:59:59.999999".formatted(monthEndDay);
+        LocalDateTime fromDate = Ut.date.parse(fromDateStr);
+        LocalDateTime toDate = Ut.date.parse(toDateStr);
+
+        return rebateItemRepository.findByPayDateBetweenOrderByIdAsc(fromDate, toDate);
     }
 }
