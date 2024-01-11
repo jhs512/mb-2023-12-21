@@ -1,5 +1,6 @@
 package com.ll.mb.domain.rebate.rebate.controller;
 
+import com.ll.mb.domain.global.exceptions.GlobalException;
 import com.ll.mb.domain.rebate.rebate.entity.RebateItem;
 import com.ll.mb.domain.rebate.rebate.service.RebateService;
 import com.ll.mb.global.rq.Rq;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -46,5 +48,17 @@ public class AdmRebateController {
         model.addAttribute("items", items);
 
         return "domain/rebate/rebate/adm/list";
+    }
+
+    @PostMapping("/{id}/rebate")
+    public String rebate(
+            @PathVariable long id,
+            String redirectUrl
+    ) {
+        RebateItem rebateItem = rebateService.findById(id).orElseThrow(() -> new GlobalException("400", "정산데이터가 존재하지 않습니다."));
+
+        rebateService.rebate(rebateItem);
+
+        return rq.redirect(redirectUrl, "%d번 정산데이터를 처리하였습니다.".formatted(rebateItem.getId()));
     }
 }

@@ -1,5 +1,9 @@
 package com.ll.mb.domain.rebate.rebate.service;
 
+import com.ll.mb.domain.cash.cash.entity.CashLog;
+import com.ll.mb.domain.global.exceptions.GlobalException;
+import com.ll.mb.domain.member.member.entity.Member;
+import com.ll.mb.domain.member.member.service.MemberService;
 import com.ll.mb.domain.product.order.entity.OrderItem;
 import com.ll.mb.domain.product.order.service.OrderService;
 import com.ll.mb.domain.rebate.rebate.entity.RebateItem;
@@ -12,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -19,6 +24,7 @@ import java.util.List;
 public class RebateService {
     private final RebateItemRepository rebateItemRepository;
     private final OrderService orderService;
+    private final MemberService memberService;
 
     @Transactional
     public void make(String yearMonth) {
@@ -64,5 +70,31 @@ public class RebateService {
         LocalDateTime toDate = Ut.date.parse(toDateStr);
 
         return rebateItemRepository.findByPayDateBetweenOrderByIdAsc(fromDate, toDate);
+    }
+
+    public Optional<RebateItem> findById(long id) {
+        return rebateItemRepository.findById(id);
+    }
+
+    @Transactional
+    public void rebate(RebateItem rebateItem) {
+        if (!rebateItem.isRebateAvailable()) {
+            throw new GlobalException("400", "정산을 할 수 없는 상태입니다.");
+        }
+
+        long rebatePrice = rebateItem.getRebatePrice();
+
+        memberService.addCash(
+                rebateItem.getSeller(),
+                rebatePrice,
+                CashLog.EvenType.작가정산__예치금,
+                rebateItem
+        );
+
+        rebateItem.setRebateDone();
+    }
+
+    public boolean canRebate(Member actor, RebateItem rebateItem) {
+        return actor.isAdmin() && rebateItem.isRebateAvailable();
     }
 }

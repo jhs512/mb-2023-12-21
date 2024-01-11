@@ -11,7 +11,8 @@
 
     <h1>기간 : <span th:text="${yearMonth}"></span></h1>
 
-    <select class="select select-bordered" th:value="${yearMonth}" onchange="location.href = '?yearMonth=' + this.value;">
+    <select class="select select-bordered" th:value="${yearMonth}"
+            onchange="location.href = '?yearMonth=' + this.value;">
         <option value="2024-01">2024-01</option>
         <option value="2024-02">2024-02</option>
     </select>
@@ -45,6 +46,11 @@
 
                 <div>
                     정산여부 : <span th:text="${item.rebateDate}"></span>
+                </div>
+
+                <div class="card-actions justify-end">
+                    <a th:if="${@rebateService.canRebate(@rq.member, item)}" method="POST" th:href="|/adm/rebate/${item.id}/rebate?redirectUrl=${@rq.encodedCurrentUrl}|"
+                       class="btn btn-primary">정산</a>
                 </div>
             </div>
         </li>
