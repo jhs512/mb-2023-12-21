@@ -24,7 +24,11 @@
         </label>
 
         <div class="mt-2">
-            <button class="btn btn-primary">선택정산</button>
+            <button onclick="RebateForm__submit();" class="btn btn-primary">선택정산</button>
+            <form method="POST" name="rebateForm" th:action="@{|/adm/rebate/rebateMany|}" hidden>
+                <input type="hidden" name="redirectUrl" th:value="${@rq.currentUrl}">
+                <input type="hidden" name="ids">
+            </form>
         </div>
     </div>
 
@@ -102,7 +106,7 @@
             const $checked = $('.rebateItemCheckbox:checked');
 
             if ($checked.length == 0) {
-                alert('정산할 주문품목을 선택해주세요.');
+                toastWarning('정산할 품목을 선택해주세요.');
                 return;
             }
 

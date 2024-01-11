@@ -94,6 +94,17 @@ public class RebateService {
         rebateItem.setRebateDone();
     }
 
+    @Transactional
+    public void rebate(List<Long> ids) {
+        ids
+                .stream()
+                .forEach(id -> {
+                    RebateItem rebateItem = rebateItemRepository.findById(id).orElseThrow(() -> new GlobalException("400", "정산데이터가 존재하지 않습니다."));
+
+                    rebate(rebateItem);
+                });
+    }
+
     public boolean canRebate(Member actor, RebateItem rebateItem) {
         return actor.isAdmin() && rebateItem.isRebateAvailable();
     }

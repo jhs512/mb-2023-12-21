@@ -141,7 +141,7 @@ public class Rq {
         return Ut.url.encode(getCurrentUrl());
     }
 
-    private String getCurrentUrl() {
+    public String getCurrentUrl() {
         String url = request.getRequestURI();
         String queryString = request.getQueryString();
 
