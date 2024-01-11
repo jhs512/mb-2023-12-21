@@ -9,6 +9,13 @@
 <div layout:fragment="content">
     <h1>정산 데이터</h1>
 
+    <h1>기간 : <span th:text="${yearMonth}"></span></h1>
+
+    <select class="select select-bordered" th:value="${yearMonth}" onchange="location.href = '?yearMonth=' + this.value;">
+        <option value="2024-01">2024-01</option>
+        <option value="2024-02">2024-02</option>
+    </select>
+
     <ul class="grid grid-cols-1 md:gird-cols-2 xl:grid-cols-3 gap-5">
         <li th:each="item : ${items}" class="card">
             <div class="card-body bg-base-100 shadow">
