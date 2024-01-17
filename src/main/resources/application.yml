@@ -4,6 +4,11 @@ spring:
   profiles:
     active: dev
     include: secret
+  batch:
+    jdbc:
+      initialize-schema: always
+    job:
+      enabled: false
   servlet:
     multipart:
       max-file-size: 50MB # 파일 업로드 최대 크기

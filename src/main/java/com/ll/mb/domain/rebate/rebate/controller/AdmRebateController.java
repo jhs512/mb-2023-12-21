@@ -2,6 +2,7 @@ package com.ll.mb.domain.rebate.rebate.controller;
 
 import com.ll.mb.domain.global.exceptions.GlobalException;
 import com.ll.mb.domain.rebate.rebate.entity.RebateItem;
+import com.ll.mb.domain.rebate.rebate.service.RebateBatchService;
 import com.ll.mb.domain.rebate.rebate.service.RebateService;
 import com.ll.mb.global.rq.Rq;
 import com.ll.mb.standard.util.Ut;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdmRebateController {
     private final RebateService rebateService;
+    private final RebateBatchService rebateBatchService;
     private final Rq rq;
 
     @GetMapping("/make")
@@ -28,7 +30,7 @@ public class AdmRebateController {
     public String make(
             String yearMonth
     ) {
-        rebateService.make(yearMonth);
+        rebateBatchService.make(yearMonth);
 
         return rq.redirect("/adm/rebate/make", "정산데이터를 생성했습니다.");
     }
